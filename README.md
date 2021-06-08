@@ -1,202 +1,373 @@
-# Spring Boot application template
+# HMC Docker :whale:
 
-[![Build Status](https://travis-ci.org/hmcts/spring-boot-template.svg?branch=master)](https://travis-ci.org/hmcts/spring-boot-template)
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start)
+- [Using HMC](#using-hmc)
+- [Running branches](#running-branches)
+- [Containers](#containers)
+- [Troubleshooting](#troubleshooting)
+- [Remarks](#remarks)
+- [License](#license)
 
-## Purpose
+## Prerequisites
 
-The purpose of this template is to speed up the creation of new Spring applications within HMCTS
-and help keep the same standards across multiple teams. If you need to create a new app, you can
-simply use this one as a starting point and build on top of it.
+- [Docker](https://www.docker.com)
 
-## What's inside
+*Memory and CPU allocations may need to be increased for successful execution of hmi applications altogether. (On Preferences / Advanced)*
 
-The template is a working application with a minimal setup. It contains:
- * application skeleton
- * setup script to prepare project
- * common plugins and libraries
- * docker setup
- * swagger configuration for api documentation ([see how to publish your api documentation to shared repository](https://github.com/hmcts/reform-api-docs#publish-swagger-docs))
- * code quality tools already set up
- * integration with Travis CI
- * Hystrix circuit breaker enabled
- * MIT license and contribution information
- * Helm chart using chart-java.
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) - minimum version 2.0.57
+- [jq Json Processor](https://stedolan.github.io/jq)
 
-The application exposes health endpoint (http://localhost:4550/health) and metrics endpoint
-(http://localhost:4550/metrics).
+*The following documentation assumes that the current directory is `hmc-docker`.*
 
-## Plugins
+## Quick start
 
-The template contains the following plugins:
-
-  * checkstyle
-
-    https://docs.gradle.org/current/userguide/checkstyle_plugin.html
-
-    Performs code style checks on Java source files using Checkstyle and generates reports from these checks.
-    The checks are included in gradle's *check* task (you can run them by executing `./gradlew check` command).
-
-  * pmd
-
-    https://docs.gradle.org/current/userguide/pmd_plugin.html
-
-    Performs static code analysis to finds common programming flaws. Included in gradle `check` task.
-
-
-  * jacoco
-
-    https://docs.gradle.org/current/userguide/jacoco_plugin.html
-
-    Provides code coverage metrics for Java code via integration with JaCoCo.
-    You can create the report by running the following command:
-
-    ```bash
-      ./gradlew jacocoTestReport
-    ```
-
-    The report will be created in build/reports subdirectory in your project directory.
-
-  * io.spring.dependency-management
-
-    https://github.com/spring-gradle-plugins/dependency-management-plugin
-
-    Provides Maven-like dependency management. Allows you to declare dependency management
-    using `dependency 'groupId:artifactId:version'`
-    or `dependency group:'group', name:'name', version:version'`.
-
-  * org.springframework.boot
-
-    http://projects.spring.io/spring-boot/
-
-    Reduces the amount of work needed to create a Spring application
-
-  * org.owasp.dependencycheck
-
-    https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/index.html
-
-    Provides monitoring of the project's dependent libraries and creating a report
-    of known vulnerable components that are included in the build. To run it
-    execute `gradle dependencyCheck` command.
-
-  * com.github.ben-manes.versions
-
-    https://github.com/ben-manes/gradle-versions-plugin
-
-    Provides a task to determine which dependencies have updates. Usage:
-
-    ```bash
-      ./gradlew dependencyUpdates -Drevision=release
-    ```
-
-## Setup
-
-Located in `./bin/init.sh`. Simply run and follow the explanation how to execute it.
-
-## Notes
-
-Since Spring Boot 2.1 bean overriding is disabled. If you want to enable it you will need to set `spring.main.allow-bean-definition-overriding` to `true`.
-
-JUnit 5 is now enabled by default in the project. Please refrain from using JUnit4 and use the next generation
-
-## Building and deploying the application
-
-### Building the application
-
-The project uses [Gradle](https://gradle.org) as a build tool. It already contains
-`./gradlew` wrapper script, so there's no need to install gradle.
-
-To build the project execute the following command:
+Checkout `hmc-docker` project:
 
 ```bash
-  ./gradlew build
+git clone git@github.com:hmcts/hmc-docker.git
 ```
 
-### Running the application
-
-Create the image of the application by executing the following command:
+Login to the Azure Container registry:
 
 ```bash
-  ./gradlew assemble
+./hmc login
 ```
+Note:
+if you experience any error with the above command, try `az login` first
 
-Create docker image:
+For [Azure Authentication for pulling latest docker images](#azure-authentication-for-pulling-latest-docker-images)
+
+
+Pulling latest Docker images:
 
 ```bash
-  docker-compose build
+./hmc compose pull
 ```
+Running initialisation steps:
 
-Run the distribution (created in `build/install/spring-boot-template` directory)
-by executing the following command:
+Note:
+required only on the first run. Once executed, it doesn't need to be executed again
 
 ```bash
-  docker-compose up
+./hmc init
 ```
 
-This will start the API container exposing the application's port
-(set to `4550` in this template app).
-
-In order to test if the application is up, you can call its health endpoint:
+Creating and starting the containers:
 
 ```bash
-  curl http://localhost:4550/health
+./hmc compose up -d
 ```
 
-You should get a response similar to this:
-
-```
-  {"status":"UP","diskSpace":{"status":"UP","total":249644974080,"free":137188298752,"threshold":10485760}}
-```
-
-### Alternative script to run application
-
-To skip all the setting up and building, just execute the following command:
-
-
-
-For more information:
-
-
-
-Script includes bare minimum environment variables necessary to start api instance. Whenever any variable is changed or any other script regarding docker image/container build, the suggested way to ensure all is cleaned up properly is by this command:
+Usage and commands available:
 
 ```bash
-docker-compose rm
+./hmc
 ```
 
-It clears stopped containers correctly. Might consider removing clutter of images too, especially the ones fiddled with:
+## Using HMC
+
+Once the containers are running, HMC's
+
+1. Outbound Adapter can be run using
+
+ ```bash
+curl http://localhost:4558/health
+ ```
+
+ensuring the response is
 
 ```bash
-docker images
-
-docker image rm <image-id>
+{"status":"UP"}
 ```
 
-There is no need to remove postgres and java or similar core images.
+2. Inbound Adapter can be run using
 
-## Hystrix
+```bash
+curl http://localhost:4559/health
+ ```
 
-[Hystrix](https://github.com/Netflix/Hystrix/wiki) is a library that helps you control the interactions
-between your application and other services by adding latency tolerance and fault tolerance logic. It does this
-by isolating points of access between the services, stopping cascading failures across them,
-and providing fallback options. We recommend you to use Hystrix in your application if it calls any services.
+ensuring the response is
 
-### Hystrix circuit breaker
+```bash
+{"status":"UP"}
+```
 
-This template API has [Hystrix Circuit Breaker](https://github.com/Netflix/Hystrix/wiki/How-it-Works#circuit-breaker)
-already enabled. It monitors and manages all the`@HystrixCommand` or `HystrixObservableCommand` annotated methods
-inside `@Component` or `@Service` annotated classes.
+## Running branches
 
-### Other
+By default, all HMC containers are running with the `latest` tag, built from the `master` branch.
 
-Hystrix offers much more than Circuit Breaker pattern implementation or command monitoring.
-Here are some other functionalities it provides:
- * [Separate, per-dependency thread pools](https://github.com/Netflix/Hystrix/wiki/How-it-Works#isolation)
- * [Semaphores](https://github.com/Netflix/Hystrix/wiki/How-it-Works#semaphores), which you can use to limit
- the number of concurrent calls to any given dependency
- * [Request caching](https://github.com/Netflix/Hystrix/wiki/How-it-Works#request-caching), allowing
- different code paths to execute Hystrix Commands without worrying about duplicating work
+### Switch to a branch
 
-## License
+Using the `set` command, branches can be changed per project. It's possible to switch to remote branches but also to local branches
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+To switch to a remote branch the command is:
 
+```bash
+./hmc set <project> <remote_branch>
+```
+
+* `<project>` the service name as declared in the compose file, e.g. hmc-hmi-outbound-adapter-api, hmc-hmi-inbound-adapter-api
+* `<remote_branch>` must be an existing **remote** branch for the selected project.
+
+To switch to a local branch the command is:
+
+```bash
+./hmc set <project> <local_branch> <file://local_repository_path>
+```
+* `<project>` the service name as declared in the compose file, e.g. hmc-hmi-outbound-adapter-api, hmc-hmi-inbound-adapter-api
+* `<local_branch>` must be an existing **local** branch for the selected project.
+* `<file://local_repository_path>` path to the root of the local project repository
+
+__Note__: when working with local branches, to be able to run any new set of local changes those must first be committed and the `switch to a local branch` and `Apply` procedure repeated.
+
+Branches for a project can be listed using:
+
+```bash
+./hmc branches <project>
+```
+
+### Apply
+
+When switching to a branch, a Docker image is built locally and the Docker compose configuration is updated.
+
+However, to make that configuration effective, the Docker containers must be updated using:
+
+```bash
+./hmc compose up -d
+```
+
+### Revert to `master`
+
+When a project has been switched to a branch, it can be reverted to `master` in 2 ways:
+
+```bash
+./hmc set <project> master
+```
+
+or
+
+```bash
+./hmc unset <project> [<projects...>]
+```
+
+The only difference is that `unset` allows for multiple projects to be reset to `master`.
+
+In both cases, like with the `set` command, for the reset to be effective it requires the containers to be updated:
+
+```bash
+./hmc compose up -d
+```
+
+### Current branches
+
+To know which branches are currently used, the `status` command can be used:
+
+```bash
+./hmc status
+```
+
+The 2nd part of the output indicates the current branches.
+The output can either be of the form:
+
+> No overrides, all using master
+
+when no branches are used; or:
+
+> Current overrides:
+> hmc-hmi-outbound-adapter-api branch:HMC-12252 hash:ced648d
+
+when branches are in use.
+
+:information_source: *In addition to the `status` command, the current status is also displayed for every `compose` commands.*
+
+#### Non-`master` branches
+
+When switching to a branch with the `set` command, the following actions take place:
+
+1. The given branch is cloned in the temporary `.workspace` folder
+2. If required, the project is built
+3. A docker image is built
+4. The Docker image is tagged as `hmcts/<project>:<branch>-<git hash>`
+5. An entry is added to file `.tags.env` exporting an environment variable `<PROJECT>_TAG` with a value `<branch>-<git hash>` matching the Docker image tag
+
+The `.tags.env` file is sourced whenever the `hmc compose` command is used and allows to override the Docker images version used in the Docker compose files.
+
+Hence, to make that change effective, the containers must be updated using `./hmc compose up`.
+
+#### `master` branch
+
+When switching a project to `master` branch, the branch override is removed using the `unset` command detailed below.
+
+### Unset
+
+Given a list of 1 or more projects, for each project:
+
+1. If `.tags.env` contains an entry for the project, the entry is removed
+
+Similarly to when branches are set, for a change to `.tags.env` to be applied, the containers must be updated using `./hmc compose up`.
+
+### Status
+
+Retrieve from `.tags.env` the branches and compose files currently enabled and display them.
+
+### Compose
+
+```bash
+./hmc compose [<docker-compose command> [options]]
+```
+
+The compose command acts as a wrapper around `docker-compose` and accept all commands and options supported by it.
+
+:information_source: *For the complete documentation of Docker Compose CLI, see [Compose command-line reference](https://docs.docker.com/compose/reference/).*
+
+Here are some useful commands:
+
+#### Up
+
+```bash
+./hmc compose up [-d]
+```
+
+This command:
+1. Create missing containers
+2. Recreate outdated containers (= apply configuration changes)
+3. Start all enabled containers
+
+The `-d` (detached) option start the containers in the background.
+
+#### Down
+
+```bash
+./hmc compose down [-v] [project]
+```
+
+This stops and destroys all composed containers.
+
+If provided, the `-v` option will also clean the volumes.
+
+Destroyed containers cannot be restarted. New containers will need to be built using the `up` command.
+
+#### Ps
+
+```bash
+./hmc compose ps [<project>]
+```
+
+Gives the current state of all or specified composed projects.
+
+#### Logs
+
+```bash
+./hmc compose logs [-f] [<project>]
+```
+
+Displays the logs for all or specified composed projects.
+
+The `-f` (follow) option allows to follow the tail of the logs.
+
+#### Start/stop
+
+```bash
+./hmc compose start [<project>]
+./hmc compose stop [<project>]
+```
+
+Start or stop all or specified composed containers. Stopped containers can be restarted with the `start` command.
+
+:warning: Please note: Re-starting a project with stop/start does **not** apply configuration changes. Instead, the `up` command should be used to that end.
+
+#### Pull
+
+```bash
+./hmc compose pull [project]
+```
+
+Fetch the latest version of an image from its source. For the new version to be used, the associated container must be re-created using the `up` command.
+
+## Containers
+
+### Back-end
+
+#### hmc-hmi-outbound-adapter-api
+
+Outbound Adaptor will take care of all the necessary security enforcement that is required by HMI.
+
+#### hmc-hmi-inbound-adapter-api
+
+This will be the main interface that receives the asynchronous request from HMI. Key function of this component is to ensure that the request that is received relates to one of the hearing request that was previously sent by HMC
+
+### Azure Authentication for pulling latest docker images
+
+```bash
+ERROR: Get <docker_image_url>: unauthorized: authentication required
+```
+
+If you see this above authentication issue while pulling images, please follow below commands,
+
+Install Azure-CLI locally,
+
+```bash
+brew update && brew install azure-cli
+```
+
+and to update a Azure-CLI locally,
+
+```bash
+brew update azure-cli
+```
+
+then,
+login to MS Azure,
+
+```bash
+az login
+```
+and finally, Login to the Azure Container registry:
+
+```bash
+./hmc login
+```
+
+On windows platform, we are installing the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) using executable .msi file.
+If "az login" command throws an error like "Access Denied", please follow these steps.
+We will need to install the az cli using Python PIP.
+1. If Microsoft Azure CLI is already installed, uninstall it from control panel.
+2. Setup the Python(version 2.x/3.x) on windows machine. PIP is bundled with Python.
+3. Execute the command "pip install azure-cli" using command line. It takes about 20 minutes to install the azure cli.
+4. Verify the installation using the command az --version.
+
+## Troubleshooting
+
+hmc-network could not be found error:
+
+- if you get "HMC: ERROR: Network hmc-network declared as external, but could not be found. Please create the network manually using docker network create hmc-network"
+    > ./hmc init
+
+## Remarks
+
+- A container can be configured to call a localhost host resource with the localhost shortcut added for docker containers recently. However the shortcut must be set according the docker host operating system.
+
+```bash
+# for Mac
+docker.for.mac.localhost
+# for Windows
+docker.for.win.localhost
+```
+
+Remember that once you changed the above for a particular app you have to make sure the container configuration for that app does not try to automatically start the dependency that you have started locally. To do that either comment out the entry for the locally running app from the **depends_on** section of the config or start the app with **--no-deps** flag.
+
+- If you happen to run `docker-compose up` before setting up the environment variables, you will probably get error while starting the DB. In that
+case, clear the containers but also watch out for volumes created to be cleared to get a fresh start since some initialisation scripts don't run if
+you have already existing volume for the container.
+
+```bash
+$ docker volume list
+DRIVER              VOLUME NAME
+
+# better be empty
+```
+
+## LICENSE
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.

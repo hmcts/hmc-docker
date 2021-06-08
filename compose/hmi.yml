@@ -1,30 +1,29 @@
 version: '2.4'
 services:
   hmc-hmi-outbound-adapter-api:
-    image: "${HMC-HMI-OUTBOUND-ADAPTER-API_USE_LOCAL-hmctspublic.azurecr.io/}hmc/hmi-outbound-adapter:${HMC-HMI-OUTBOUND-ADAPTER-API_TAG:-latest}"
+    image: "${HMC_HMI_OUTBOUND_ADAPTER_USE_LOCAL-hmctspublic.azurecr.io/}hmc/hmi-outbound-adapter:${HMC_HMI_OUTBOUND_ADAPTER_TAG:-latest}"
     environment:
-      REFORM_SERVICE_NAME: hmc-hmi-outbound-adapter
+      REFORM_SERVICE_NAME: hmc-hmi-outbound-adapter-api
       REFORM_TEAM: hmi
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
     ports:
       - 4558:4558
     networks:
-      - ccd-network
+      - hmc-network
 
   hmc-hmi-inbound-adapter-api:
-    image: "${HMC-HMI-INBOUND-ADAPTER-API_USE_LOCAL-hmctspublic.azurecr.io/}hmc/hmi-inbound-adapter:${HMC-HMI-INBOUND-ADAPTER-API_TAG:-latest}"
+    image: "${HMC_HMI_INBOUND_ADAPTER_USE_LOCAL-hmctspublic.azurecr.io/}hmc/hmi-inbound-adapter:${HMC_HMI_INBOUND_ADAPTER_TAG:-latest}"
     environment:
-      REFORM_SERVICE_NAME: hmc-hmi-outbound-adapter
+      REFORM_SERVICE_NAME: hmc-hmi-inbound-adapter-api
       REFORM_TEAM: hmi
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
     ports:
       - 4559:4559
     networks:
-      - ccd-network
-
+      - hmc-network
 
 networks:
-  hmi-network:
+  hmc-network:
     external: true

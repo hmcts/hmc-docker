@@ -10,20 +10,20 @@ function project_config() {
     project=$1
     config=$2
     case $project in
-        hmc-hmi-outbound-adapter-api|hmc-hmi-outbound-adapter|hmi-outbound-adapter-api|outbound-adapter-api|outbound-adapter)
+       hmc-hmi-outbound-adapter-api|hmc-hmi-outbound-adapter|hmi-outbound-adapter|outbound-adapter-api|outbound-adapter)
             name=hmc-hmi-outbound-adapter-api
-            repository="git@github.com/hmcts/hmc-hmi-outbound-adapter.git"
-            envPrefix="HMC-HMI-OUTBOUND-ADAPTER-API"
+            repository="git@github.com:hmcts/hmc-hmi-outbound-adapter.git"
+            envPrefix="HMC_HMI_OUTBOUND_ADAPTER"
             buildCommand=$GRADLE_ASSEMBLE_CMD
             ;;
-        hmc-hmi-inbound-adapter-api|hmc-hmi-inbound-adapter|hmi-inbound-adapter-api|inbound-adapter-api|inbound-adapter)
+        hmc-hmi-inbound-adapter-api|hmc-hmi-inbound-adapter|hmi-inbound-adapter|inbound-adapter-api|inbound-adapter)
             name=hmc-hmi-inbound-adapter-api
-            repository="git@github.com/hmcts/hmc-hmi-inbound-adapter.git"
-            envPrefix="HMC-HMI-INBOUND-ADAPTER-API"
+            repository="git@github.com:hmcts/hmc-hmi-inbound-adapter.git"
+            envPrefix="HMC_HMI_INBOUND_ADAPTER"
             buildCommand=$GRADLE_ASSEMBLE_CMD
             ;;
         *)
-            echo "Project must be one of: hmc-hmi-outbound-adapter-api, hmc-hmi-inbound-adapter-api"
+            echo "Project must be one of: hmc-hmi-outbound-adapter, hmc-hmi-inbound-adapter"
             exit 1 ;;
     esac
     case $config in
@@ -214,7 +214,7 @@ function has_active_compose_files() {
     if [ $(has_tagfile) -eq 0 ]; then
         echo 0
     else
-        egrep -q "^HMI_ENABLED_COMPOSE_FILES=" $TAGS_FILE
+        egrep -q "^HMC_ENABLED_COMPOSE_FILES=" $TAGS_FILE
         if [ $? -eq 0 ]; then
             echo 1
         else
@@ -226,18 +226,19 @@ function has_active_compose_files() {
 function active_compose_files() {
     if [ $(has_active_compose_files) -eq 1 ]; then
         source $TAGS_FILE
-        echo $HMI_ENABLED_COMPOSE_FILES
+        echo $HMC_ENABLED_COMPOSE_FILES
     else
         echo $(default_compose_files)
     fi
 }
 
+
 function create_compose_file_options() {
     for compose_file in $(active_compose_files)
     do
-      if [ ${compose_file} != "logstash" ]; then
+      #if [ ${compose_file} != "logstash" ]; then
         compose_file_options="$compose_file_options -f compose/${compose_file}.yml"
-      fi
+      #fi
     done
     echo $compose_file_options
 }
@@ -380,8 +381,8 @@ function hmc_branches() {
 }
 
 function hmc_init() {
-    echo "creating docker network 'hmi-network'"
-    docker network create hmi-network && echo "'hmi-network' created"
+    echo "creating docker network 'hmc-network'"
+    docker network create hmc-network && echo "'hmc-network' created"
 }
 
 function hmc_status() {
@@ -416,7 +417,7 @@ function hmc_enable_show() {
 
 function hmc_enable_defaults() {
     if [ $(has_active_compose_files) -eq 1 ]; then
-        sed -i '' "/HMI_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
+        sed -i '' "/HMC_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
     fi
 }
 
@@ -429,18 +430,18 @@ function hmc_enable_compose_file() {
         else
             touch $TAGS_FILE
             source $TAGS_FILE
-            sed -i '' "/HMI_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
+            sed -i '' "/HMC_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
             existing=0
-            for enabled_file in $HMI_ENABLED_COMPOSE_FILES
+            for enabled_file in $HMC_ENABLED_COMPOSE_FILES
             do
                 if [ "$compose_file" == "$enabled_file" ]; then
                     existing=1
                 fi
             done
             if [ $existing -eq 0 ]; then
-                echo "HMI_ENABLED_COMPOSE_FILES=\"$HMI_ENABLED_COMPOSE_FILES $compose_file\"" >> $TAGS_FILE
+                echo "HMC_ENABLED_COMPOSE_FILES=\"$HMC_ENABLED_COMPOSE_FILES $compose_file\"" >> $TAGS_FILE
             else
-                echo "HMI_ENABLED_COMPOSE_FILES=\"$HMI_ENABLED_COMPOSE_FILES\"" >> $TAGS_FILE
+                echo "HMC_ENABLED_COMPOSE_FILES=\"$HMC_ENABLED_COMPOSE_FILES\"" >> $TAGS_FILE
             fi
         fi
     done
@@ -471,9 +472,9 @@ function hmc_disable() {
         do
             touch $TAGS_FILE
             source $TAGS_FILE
-            sed -i '' "/HMI_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
+            sed -i '' "/HMC_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
             existing=0
-            for enabled_file in $HMI_ENABLED_COMPOSE_FILES
+            for enabled_file in $HMC_ENABLED_COMPOSE_FILES
             do
                 #if enabled_file is not in the list to be disabled and it's not in $new_enabled yet
                 if [[ ! " $* " =~ .*\ $enabled_file\ .* ]] && [[ ! " $new_enabled " =~ .*\ $enabled_file\ .* ]]; then
@@ -487,15 +488,13 @@ function hmc_disable() {
                 echo $(active_compose_files))
             fi
             if [ "$new_enabled" != "" ]; then
-                echo "HMI_ENABLED_COMPOSE_FILES=\"$new_enabled\"" >> $TAGS_FILE
+                echo "HMC_ENABLED_COMPOSE_FILES=\"$new_enabled\"" >> $TAGS_FILE
             fi
         done
     fi
 }
 
 function hmc_compose() {
-
-    print_warn_on_compose_down_if_idam_enabled $*
 
     usage_compose $*
     status_compose_files
@@ -504,11 +503,11 @@ function hmc_compose() {
     if [ $(has_tagfile) -eq 1 ]; then
         source $TAGS_FILE
     fi
+
     compose_file_options=$(create_compose_file_options)
     echo "Docker compose:"
     echo -e "docker-compose $compose_file_options $options\n"
     docker-compose $compose_file_options $options
-    hmc_compose_logstash $options
 }
 
 function hmc_login() {

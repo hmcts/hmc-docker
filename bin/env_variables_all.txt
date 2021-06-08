@@ -1,4 +1,1 @@
-# SERVER_PORT=4550
-
-# Microsoft Insights Key
 APPINSIGHTS_INSTRUMENTATIONKEY=SomeRandomStringForLocalDocker
