@@ -8,6 +8,7 @@ services:
       REFORM_SERVICE_NAME: hmc-hmi-outbound-adapter
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
+      WIREMOCK_URL: "${WIREMOCK_STUB_SERVICE_NAME:-http://hmc-wiremock:4459}"
     ports:
       - 4558:4558
     depends_on:
