@@ -4,6 +4,7 @@
 - [Quick start](#quick-start)
 - [Using HMC](#using-hmc)
 - [Running branches](#running-branches)
+- [Under the hood](#under-the-hood-speedboat)
 - [Containers](#containers)
 - [Troubleshooting](#troubleshooting)
 - [Remarks](#remarks)
@@ -180,6 +181,10 @@ when no branches are used; or:
 when branches are in use.
 
 :information_source: *In addition to the `status` command, the current status is also displayed for every `compose` commands.*
+
+## Under the hood :speedboat:
+
+### Set
 
 #### Non-`master` branches
 

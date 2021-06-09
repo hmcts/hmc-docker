@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "PUT",
+    "urlPath": "/hearings/CASE123432",
+    "headers": {
+      "Source-System": {
+        "equalTo": "CFT"
+      },
+      "Destination-System": {
+        "equalTo": "MOCK"
+      }
+    }
+  },
+  "response": {
+    "status": 202,
+    "bodyFileName": "202-success-response.json"
+  }
+}

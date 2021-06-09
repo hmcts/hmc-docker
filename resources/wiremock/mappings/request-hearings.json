@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/hearings",
+    "headers": {
+      "Source-System": {
+        "equalTo": "CFT"
+      },
+      "Destination-System": {
+        "equalTo": "MOCK"
+      },
+      "Request-Type": {
+        "equalTo": "THEFT"
+      }
+    }
+  },
+  "response": {
+    "status": 202,
+    "bodyFileName": "202-success-response.json"
+  }
+}
