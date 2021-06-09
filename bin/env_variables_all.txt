@@ -16,3 +16,4 @@ export BEFTA_IDAM_CAA_USERNAME=master.caa@gmail.com
 export BEFTA_IDAM_CAA_PASSWORD=Pa55word11
 
 WIREMOCK_STUB_SERVICE_NAME=http://localhost:4459
+
