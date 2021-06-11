@@ -190,9 +190,8 @@ function docker_build() {
     buildProject=$project
     workspace=$(workspace_dir $project)
     tagName=$(tag_name $project $branch)
-    # hmi-api-gateway image from azure coming as hmi-api-gateway-web, to match and fix for local branch build
-    imageName=${buildProject#"hmi-"}
-    cd $workspace && docker build . -t ccd/$imageName:$tagName || exit $?
+    imageName=${buildProject#"hmc-"}
+    (cd $workspace && docker build . -t hmc/$imageName:$tagName || exit $?)
 }
 
 function available_compose_files() {
@@ -494,7 +493,6 @@ function hmc_disable() {
 }
 
 function hmc_compose() {
-
     usage_compose $*
     status_compose_files
     status_tags
