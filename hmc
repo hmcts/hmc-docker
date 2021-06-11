@@ -183,7 +183,6 @@ function project_build() {
     fi
 }
 
-
 function docker_build() {
     project=$1
     branch=$2
