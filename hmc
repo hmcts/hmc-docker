@@ -183,15 +183,14 @@ function project_build() {
     fi
 }
 
-
 function docker_build() {
     project=$1
     branch=$2
     buildProject=$project
     workspace=$(workspace_dir $project)
     tagName=$(tag_name $project $branch)
-    # hmi-api-gateway image from azure coming as hmi-api-gateway-web, to match and fix for local branch build
-    imageName=${buildProject#"hmi-"}
+    imageName=${buildProject#"hmc-"}
+    (cd $workspace && docker build . -t hmc/$imageName:$tagName || exit $?)
 }
 
 function available_compose_files() {
@@ -236,9 +235,7 @@ function active_compose_files() {
 function create_compose_file_options() {
     for compose_file in $(active_compose_files)
     do
-      #if [ ${compose_file} != "logstash" ]; then
         compose_file_options="$compose_file_options -f compose/${compose_file}.yml"
-      #fi
     done
     echo $compose_file_options
 }
@@ -495,7 +492,6 @@ function hmc_disable() {
 }
 
 function hmc_compose() {
-
     usage_compose $*
     status_compose_files
     status_tags
