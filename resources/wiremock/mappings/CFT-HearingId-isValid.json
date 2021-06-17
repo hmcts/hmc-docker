@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/hearing/123",
+    "queryParameters": {
+      "isValid": {
+        "matches": ".*"
+      }
+    }
+  },
+  "response": {
+    "status": 202,
+    "bodyFileName": "202-CFT-Hearing-success-response.json"
+  }
+}
