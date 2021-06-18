@@ -1,4 +1,4 @@
 {
-  "response code": 404,
-  "description": "Invalid id received."
+  "status code": 404,
+  "description": "Invalid hearing id received."
 }
