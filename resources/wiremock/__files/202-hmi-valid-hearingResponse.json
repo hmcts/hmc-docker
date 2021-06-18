@@ -1,19 +1,7 @@
 {
   "hearingResponse": {
-    "meta": {
-      "transactionIdCaseHQ": "1111111ddddddasasdasdasdasdasdasdasdasd11"
-    },
-    "hearing": {
-      "hearingCaseIdHMCTS": "SW710014",
-      "hearingIdCaseHQ": "47743382",
-      "hearingVenueId": "300",
-      "hearingRoomId": "304",
-      "hearingType": "DECNIS",
-      "hearingStartTime": "2017-07-18T10:00:00",
-      "hearingEndTime": "2017-07-18T11:30:00",
-      "hearingCreatedDate": "2017-07-10T15:30:17.223",
-      "hearingCreatedBy": "SYSADM",
-      "hearingJudgeId": "fred.smith@abc.net"
-    }
+      "transactionIdCaseHQ": "1111111ddddddasasdasdasdasdasdasdasdasd11",
+      "apiVersion": "SW710014"
+
   }
 }
