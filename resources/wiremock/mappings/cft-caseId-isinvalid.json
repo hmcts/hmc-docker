@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "urlPath": "/hearing/123",
+    "urlPath": "/hearing/456",
     "queryParameters": {
       "isValid": {
         "matches": ".*"
@@ -9,7 +9,7 @@
     }
   },
   "response": {
-    "status": 202,
-    "bodyFileName": "202-CFT-Hearing-success-response.json"
+    "status": 404,
+    "bodyFileName": "404-cft-hearing-failure-response.json"
   }
 }

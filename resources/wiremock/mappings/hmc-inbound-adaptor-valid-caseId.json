@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "PUT",
+    "urlPath": "/listings/123"
+  },
+  "response": {
+    "status": 202,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "202-hmi-valid-hearingResponse.json"
+  }
+}
