@@ -9,7 +9,6 @@
     }
   },
   "response": {
-    "status": 202,
-    "bodyFileName": "202-cft-hearing-success-response.json"
+    "status": 204
   }
 }
