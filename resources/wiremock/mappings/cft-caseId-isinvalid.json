@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "urlPath": "/hearing/456",
+    "urlPath": "/hearing/CASE111111",
     "queryParameters": {
       "isValid": {
         "matches": ".*"
