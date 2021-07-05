@@ -26,6 +26,8 @@ services:
       APPINSIGHTS_INSTRUMENTATIONKEY: key
     ports:
       - 4559:4559
+    depends_on:
+      - hmc-wiremock
     networks:
       - hmc-network
 
