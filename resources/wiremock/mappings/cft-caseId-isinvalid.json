@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/hearing/CASE111111",
+    "queryParameters": {
+      "isValid": {
+        "matches": ".*"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "bodyFileName": "404-cft-hearing-failure-response.json"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/hearing/CASE123456",
+    "queryParameters": {
+      "isValid": {
+        "matches": ".*"
+      }
+    }
+  },
+  "response": {
+    "status": 204
+  }
+}
