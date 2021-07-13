@@ -24,6 +24,7 @@ services:
       REFORM_SERVICE_NAME: hmc-hmi-inbound-adapter
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
+      CFT_HEARING_SERVICE_URL: "${CFT_HEARING_SERVICE_URL:-http://hmc-wiremock:4459}"
     ports:
       - 4559:4559
     depends_on:
