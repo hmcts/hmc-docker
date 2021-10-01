@@ -32,6 +32,23 @@ services:
     networks:
       - hmc-network
 
+
+  hmc-cft-hearing-service:
+    image: "${HMC_CFT_HEARING_SERVICE_USE_LOCAL-hmctspublic.azurecr.io/}hmc/hmc-cft-hearing-service:${HMC_CFT_HEARING_SERVICE_TAG:-latest}"
+    container_name: cft-hearing-service
+    environment:
+      SERVER_PORT: 4561
+      REFORM_SERVICE_NAME: hmc-cft-hearing-service
+      REFORM_ENVIRONMENT: local
+      APPINSIGHTS_INSTRUMENTATIONKEY: key
+      WIREMOCK_URL: "${WIREMOCK_STUB_SERVICE_NAME:-http://hmc-wiremock:4459}"
+    ports:
+      - 4561:4561
+    depends_on:
+      - hmc-wiremock
+    networks:
+      - hmc-network
+
   hmc-wiremock:
     image: rodolpheche/wiremock
     container_name: hmc-wiremock
