@@ -57,6 +57,26 @@ services:
     networks:
       - hmc-network
 
+  hmc-shared-database:
+    build: ../database
+    healthcheck:
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    environment:
+      DB_USERNAME:
+      DB_PASSWORD:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5060:5432
+    volumes:
+      - hmc-docker-hmc-shared-database-data:/var/lib/postgresql/data
+    networks:
+      - hmc-network
+
+volumes:
+  hmc-docker-hmc-shared-database-data:
+
 networks:
   hmc-network:
     external: true
