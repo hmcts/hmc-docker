@@ -1,3 +1,8 @@
+# Dynamic image tags
+.tags.env
+
+.workspace
+
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -21,5 +26,3 @@ bin/main/application.yaml
 
 .DS_Store
 
-# Dynamic image tags
-.tags.env
