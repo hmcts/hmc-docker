@@ -43,7 +43,7 @@ services:
       - hmc-network
 
   hmc-cft-hearing-service:
-    image: "${HMC_CFT_HEARING_SERVICE_USE_LOCAL-hmctspublic.azurecr.io/}hmc/cft-hearing-service:${HMC_CFT_HEARING_SERVICE_TAG:-latest}"
+    image: hmctspublic.azurecr.io/hmc/cft-hearing-service:pr-6-2622dae-20211008142131
     container_name: cft-hearing-service
     environment:
       HMC_HEARING_MANAGEMENT_DB_USERNAME: ccd
