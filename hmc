@@ -16,18 +16,19 @@ function project_config() {
             envPrefix="HMC_HMI_OUTBOUND_ADAPTER"
             buildCommand=$GRADLE_ASSEMBLE_CMD
             ;;
-       hmc-hmi-inbound-adapter-api|hmc-hmi-inbound-adapter|hmi-inbound-adapter|inbound-adapter-api|inbound-adapter)
+        hmc-hmi-inbound-adapter-api|hmc-hmi-inbound-adapter|hmi-inbound-adapter|inbound-adapter-api|inbound-adapter)
             name=hmc-hmi-inbound-adapter-api
             repository="git@github.com:hmcts/hmc-hmi-inbound-adapter.git"
             envPrefix="HMC_HMI_INBOUND_ADAPTER"
             buildCommand=$GRADLE_ASSEMBLE_CMD
             ;;
-       hmc-cft-hearing-service-api|hmc-cft-hearing-service|cft-hearing-service|hearing-service-api|hearing-service)
+        hmc-cft-hearing-service-api|hmc-cft-hearing-service|cft-hearing-service|cft-hearing-service-api|hearing-service)
             name=hmc-cft-hearing-service-api
             repository="git@github.com:hmcts/hmc-cft-hearing-service.git"
-            envPrefix="HMC_HEARING_MANAGEMENT"
+            envPrefix="HMC_CFT_HEARING_SERVICE"
             buildCommand=$GRADLE_ASSEMBLE_CMD
             ;;
+
         *)
             echo "Project must be one of: hmc-hmi-outbound-adapter, hmc-hmi-inbound-adapter, hmc-cft-hearing-service"
             exit 1 ;;
