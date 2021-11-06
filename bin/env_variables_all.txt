@@ -15,4 +15,7 @@ export TEST_URL=http://localhost:4454
 export BEFTA_IDAM_CAA_USERNAME=master.caa@gmail.com
 export BEFTA_IDAM_CAA_PASSWORD=Pa55word11
 
+export HMC_DB_USERNAME=hmc
+export HMC_DB_PASSWORD=hmc
+
 WIREMOCK_STUB_SERVICE_NAME=http://localhost:4459

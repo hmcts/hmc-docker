@@ -30,7 +30,7 @@ function project_config() {
             ;;
 
         *)
-            echo "Project must be one of: hmc-hmi-outbound-adapter, hmc-hmi-inbound-adapter"
+            echo "Project must be one of: hmc-hmi-outbound-adapter, hmc-hmi-inbound-adapter, hmc-cft-hearing-service"
             exit 1 ;;
     esac
     case $config in
