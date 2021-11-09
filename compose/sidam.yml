@@ -1,0 +1,43 @@
+# just a copy of 'docker-compose.yml' in https://tools.hmcts.net/confluence/display/SISM/Local+Docker+Setup
+# avoid modifying this file directly. Add any customisations to HMC Idam to `sidam-local-hmc.yml` instead
+---
+version: '2.4'
+
+services:
+  hmc-fr-am:
+    image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
+    hostname: localam
+    depends_on:
+      hmc-shared-db:
+        condition: service_started
+  hmc-fr-idm:
+    image: hmctsprivate.azurecr.io/idam/idam-fr-idm:latest
+    hostname: localidm
+    depends_on:
+      hmc-fr-am:
+        condition: service_started
+      hmc-shared-db:
+        condition: service_started
+  hmc-shared-db:
+    image: hmctsprivate.azurecr.io/idam/shared-db:latest
+  hmc-smtp-server:
+    image: mailhog/mailhog
+  hmc-idam-api:
+    image: hmctspublic.azurecr.io/idam/api:stable
+    depends_on:
+      hmc-fr-am:
+        condition: service_started
+      hmc-shared-db:
+        condition: service_started
+  hmc-idam-web-public:
+    image: hmctspublic.azurecr.io/idam/web-public:stable
+    depends_on:
+      hmc-idam-api:
+        condition: service_started
+  hmc-idam-web-admin:
+    image: hmctspublic.azurecr.io/idam/web-admin:stable
+    depends_on:
+      hmc-idam-api:
+        condition: service_started
+
+

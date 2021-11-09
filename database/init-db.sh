@@ -12,7 +12,7 @@ psql -v ON_ERROR_STOP=1 --username postgres --set USERNAME=$HMC_DB_USERNAME --se
   CREATE USER :USERNAME WITH PASSWORD ':PASSWORD';
 EOSQL
 
-for service in hmc_cft_hearing_service; do
+for service in hmc_cft_hearing_service idam; do
   echo "Database $service: Creating..."
 psql -v ON_ERROR_STOP=1 --username postgres --set USERNAME=$HMC_DB_USERNAME --set PASSWORD=$HMC_DB_PASSWORD --set DATABASE=$service <<-EOSQL
   CREATE DATABASE :DATABASE

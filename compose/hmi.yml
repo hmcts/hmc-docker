@@ -55,10 +55,19 @@ services:
       REFORM_SERVICE_NAME: hmc-cft-hearing-service
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
+      CFT_HEARING_SERVICE_IDAM_CLIENT_SECRET: hmc_cft_hearing_service_secret
+      CFT_HEARING_SERVICE_S2S_AUTHORISED_SERVICES: xui_webapp,ccd_data,am_role_assignment_service
+      CFT_HEARING_SERVICE_IDAM_KEY: "${IDAM_KEY_CFT_HEARING_SERVICE}"
+      IDAM_USER_URL: "${IDAM_STUB_SERVICE_NAME:-http://hmc-idam-api:5000}" # For backward compatibility with older images
+      IDAM_API_BASE_URL: "${IDAM_STUB_SERVICE_NAME:-http://hmc-idam-api:5000}"
+      IDAM_OIDC_URL: "${IDAM_STUB_SERVICE_NAME:-http://hmc-idam-api:5000}"
+      IDAM_S2S_URL: http://hmc-service-auth-provider-api:8080
     ports:
       - 4561:4561
     depends_on:
       hmc-shared-database:
+        condition: service_started
+      hmc-idam-api:
         condition: service_started
     networks:
       - hmc-network
@@ -79,6 +88,23 @@ services:
       - hmc-docker-hmc-shared-database-data:/var/lib/postgresql/data
     networks:
       - hmc-network
+
+  hmc-service-auth-provider-api:
+    image: "hmctspublic.azurecr.io/rpe/service-auth-provider:latest"
+    healthcheck:
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    ports:
+      - 4502:8080
+    environment:
+      SERVER_PORT: 8080
+      JWT_KEY: wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
+      MICROSERVICEKEYS_HEARING_SERVICE: "${IDAM_KEY_CFT_HEARING_SERVICE}"
+      TESTING_SUPPORT_ENABLED: "true"
+    networks:
+      - hmc-network
+
 
 volumes:
   hmc-docker-hmc-shared-database-data:

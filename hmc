@@ -499,6 +499,9 @@ function hmc_disable() {
 }
 
 function hmc_compose() {
+
+    print_warn_on_compose_down_if_idam_enabled $*
+
     usage_compose $*
     status_compose_files
     status_tags
@@ -511,6 +514,18 @@ function hmc_compose() {
     echo "Docker compose:"
     echo -e "docker-compose $compose_file_options $options\n"
     docker-compose $compose_file_options $options
+}
+
+function print_warn_on_compose_down_if_idam_enabled {
+    if [[ $(active_compose_files) == *"sidam"* ]] && [[ $1 = "down" ]]; then
+        read -p "WARNING - 'down' will remove Idam data. Use 'stop' to preserve data. Or if you intended to remove only HMC containers, disable Idam
+        compose files first. Do you want to continue?" yn
+        case $yn in
+            [Yy]* ) ;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    fi
 }
 
 function hmc_login() {
