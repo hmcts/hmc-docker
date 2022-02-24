@@ -29,6 +29,27 @@ Checkout `hmc-docker` project:
 git clone git@github.com:hmcts/hmc-docker.git
 ```
 
+### Update environment variables
+The following variables need to be populated in the hmi.yml:
+
+For hmc-hmi-outbound-adapter
+````
+HMC_SERVICE_BUS_CONNECTION_STRING
+````
+
+For hmc-hmi-inbound-adapter
+````
+HMC_SERVICE_BUS_CONNECTION_STRING
+````
+
+For  hmc-cft-hearing-service
+````
+HMC_QUEUE_CONNECTION_STRING
+HMC_OUTBOUND_QUEUE_CONNECTION_STRING
+HMC_SERVICE_BUS_CONNECTION_STRING
+````
+
+
 Login to the Azure Container registry:
 
 ```bash
@@ -86,6 +107,18 @@ ensuring the response is
 
 ```bash
 curl http://localhost:4559/health
+ ```
+
+ensuring the response is
+
+```bash
+{"status":"UP"}
+```
+
+3. CFT Hearing Service can be run using
+
+```bash
+curl http://localhost:4561/health
  ```
 
 ensuring the response is
