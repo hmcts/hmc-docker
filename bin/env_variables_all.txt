@@ -11,6 +11,12 @@ export CCD_BEFTA_MASTER_SOLICITOR_4_PWD=Pa55word11
 export CCD_BEFTA_PUI_CAA_1_PWD=Pa55word11
 export CCD_BEFTA_SOLICITOR_4_PWD=Pa55word11
 export TEST_URL=http://localhost:4454
+export HMC_QUEUE_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+export HMC_QUEUE_NAME=hmc-from-hmi-demo
+export HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo
+export HMC_SERVICE_BUS_TOPIC=hmc-to-cft
+export HMC_OUTBOUND_QUEUE_CONNECTION_STRING=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+export HMC_OUTBOUND_SERVICE_BUS_QUEUE=hmc-to-hmi-demo
 
 export BEFTA_IDAM_CAA_USERNAME=master.caa@gmail.com
 export BEFTA_IDAM_CAA_PASSWORD=Pa55word11

@@ -10,7 +10,7 @@ services:
       APPINSIGHTS_INSTRUMENTATIONKEY: key
       WIREMOCK_URL: "${WIREMOCK_STUB_SERVICE_NAME:-http://hmc-wiremock:4459}"
       HMC_SERVICE_BUS_QUEUE: "hmc-to-hmi-demo"
-      HMC_SERVICE_BUS_CONNECTION_STRING: ""
+      HMC_SERVICE_BUS_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo"
     ports:
       - 4558:4558
     depends_on:
@@ -28,7 +28,7 @@ services:
       APPINSIGHTS_INSTRUMENTATIONKEY: key
       CFT_HEARING_SERVICE_URL: "${CFT_HEARING_SERVICE_URL:-http://hmc-wiremock:4459}"
       HMC_SERVICE_BUS_QUEUE: "hmc-from-hmi-demo"
-      HMC_SERVICE_BUS_CONNECTION_STRING: ""
+      HMC_SERVICE_BUS_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo"
     ports:
       - 4559:4559
     depends_on:
@@ -61,13 +61,13 @@ services:
       APPINSIGHTS_INSTRUMENTATIONKEY: key
       IDAM_OIDC_URL: "${IDAM_STUB_SERVICE_NAME:-http://docker.for.mac.localhost:5000}"
       #inbound queue
-      HMC_QUEUE_CONNECTION_STRING: ""
+      HMC_QUEUE_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo"
       HMC_SERVICE_BUS_QUEUE: "hmc-from-hmi-demo"
       #outbound queue
-      HMC_OUTBOUND_QUEUE_CONNECTION_STRING: ""
+      HMC_OUTBOUND_QUEUE_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo"
       HMC_OUTBOUND_SERVICE_BUS_QUEUE: "hmc-to-hmi-demo"
       #topic connection
-      HMC_SERVICE_BUS_CONNECTION_STRING: ""
+      HMC_SERVICE_BUS_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo"
       HMC_SERVICE_BUS_TOPIC: "hmc-to-cft-demo"
       HMC_SERVICE_BUS_SUBSCRIPTION: "hmc-subs-to-cft-demo"
     ports:

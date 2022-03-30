@@ -30,25 +30,60 @@ git clone git@github.com:hmcts/hmc-docker.git
 ```
 
 ### Update environment variables
+
+
+Add these to the env_variables_all.txt
+````
+export HMC_QUEUE_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+export HMC_QUEUE_NAME=hmc-from-hmi-demo
+export HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo
+export HMC_SERVICE_BUS_TOPIC=hmc-to-cft
+export HMC_OUTBOUND_QUEUE_CONNECTION_STRING=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+export HMC_OUTBOUND_SERVICE_BUS_QUEUE=hmc-to-hmi-demo
+````
+
 The following variables need to be populated in the hmi.yml:
 
 For hmc-hmi-outbound-adapter
 ````
-HMC_SERVICE_BUS_CONNECTION_STRING
+HMC_SERVICE_BUS_CONNECTION_STRINGHMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo
 ````
 
 For hmc-hmi-inbound-adapter
 ````
-HMC_SERVICE_BUS_CONNECTION_STRING
+HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo
 ````
 
 For  hmc-cft-hearing-service
 ````
-HMC_QUEUE_CONNECTION_STRING
-HMC_OUTBOUND_QUEUE_CONNECTION_STRING
-HMC_SERVICE_BUS_CONNECTION_STRING
+HMC_QUEUE_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+HMC_OUTBOUND_QUEUE_CONNECTION_STRING=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+HMC_OUTBOUND_SERVICE_BUS_QUEUE=hmc-to-hmi-demo
 ````
 
+
+Go to the hmc bash terminal and edit bash profile
+
+First by entering this
+
+````
+vi .bash_profile
+````
+
+Then adding these two exports
+
+````
+export HMC_DB_USERNAME=hmc
+export HMC_DB_PASSWORD=hmc
+````
+
+exit the bash profile editor and enter this command
+
+````
+source ~/.bash_profile
+````
+
+Open a new window in the hmc-docker terminal and restart intelliJ
 
 Login to the Azure Container registry:
 
@@ -60,6 +95,11 @@ if you experience any error with the above command, try `az login` first
 
 For [Azure Authentication for pulling latest docker images](#azure-authentication-for-pulling-latest-docker-images)
 
+Run the login subscription
+````
+az acr login --name hmctspublic --subscription DCD-CNP-Prod
+az acr login --name hmctsprivate --subscription DCD-CNP-Prod
+````
 
 Pulling latest Docker images:
 
