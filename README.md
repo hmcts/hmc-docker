@@ -34,11 +34,11 @@ git clone git@github.com:hmcts/hmc-docker.git
 
 Add these to the env_variables_all.txt
 ````
-export HMC_QUEUE_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+export HMC_QUEUE_CONNECTION_STRING=x
 export HMC_QUEUE_NAME=hmc-from-hmi-demo
-export HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo
+export HMC_SERVICE_BUS_CONNECTION_STRING=x
 export HMC_SERVICE_BUS_TOPIC=hmc-to-cft
-export HMC_OUTBOUND_QUEUE_CONNECTION_STRING=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+export HMC_OUTBOUND_QUEUE_CONNECTION_STRING=x
 export HMC_OUTBOUND_SERVICE_BUS_QUEUE=hmc-to-hmi-demo
 ````
 
@@ -46,18 +46,18 @@ The following variables need to be populated in the hmi.yml:
 
 For hmc-hmi-outbound-adapter
 ````
-HMC_SERVICE_BUS_CONNECTION_STRINGHMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo
+HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=x
 ````
 
 For hmc-hmi-inbound-adapter
 ````
-HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo
+HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=x
 ````
 
 For  hmc-cft-hearing-service
 ````
-HMC_QUEUE_CONNECTION_STRING=Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
-HMC_OUTBOUND_QUEUE_CONNECTION_STRING=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo
+HMC_QUEUE_CONNECTION_STRING=Endpoint=x
+HMC_OUTBOUND_QUEUE_CONNECTION_STRING=x
 HMC_OUTBOUND_SERVICE_BUS_QUEUE=hmc-to-hmi-demo
 ````
 
