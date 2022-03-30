@@ -26,9 +26,11 @@ services:
       REFORM_SERVICE_NAME: hmc-hmi-inbound-adapter
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
-      CFT_HEARING_SERVICE_URL: "${CFT_HEARING_SERVICE_URL:-http://hmc-wiremock:4459}"
+      CFT_HEARING_SERVICE_URL: "${CFT_HEARING_SERVICE_URL:-http://hmc-cft-hearing-service:4561}"
       HMC_SERVICE_BUS_QUEUE: "hmc-from-hmi-demo"
       HMC_SERVICE_BUS_CONNECTION_STRING: ""
+      IDAM_API_URL: "${IDAM_STUB_SERVICE_NAME:-http://docker.for.mac.localhost:5000}"
+      S2S_URL: http://docker.for.mac.localhost:4502
     ports:
       - 4559:4559
     depends_on:
@@ -60,6 +62,7 @@ services:
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
       IDAM_OIDC_URL: "${IDAM_STUB_SERVICE_NAME:-http://docker.for.mac.localhost:5000}"
+      IDAM_API_URL: "${IDAM_STUB_SERVICE_NAME:-http://docker.for.mac.localhost:5000}"
       #inbound queue
       HMC_QUEUE_CONNECTION_STRING: ""
       HMC_SERVICE_BUS_QUEUE: "hmc-from-hmi-demo"
@@ -70,6 +73,7 @@ services:
       HMC_SERVICE_BUS_CONNECTION_STRING: ""
       HMC_SERVICE_BUS_TOPIC: "hmc-to-cft-demo"
       HMC_SERVICE_BUS_SUBSCRIPTION: "hmc-subs-to-cft-demo"
+      S2S_URL: http://docker.for.mac.localhost:4502
     ports:
       - 4561:4561
     depends_on:
