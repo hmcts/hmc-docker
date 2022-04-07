@@ -9,8 +9,10 @@ services:
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
       WIREMOCK_URL: "${WIREMOCK_STUB_SERVICE_NAME:-http://hmc-wiremock:4459}"
-      HMC_SERVICE_BUS_QUEUE: "hmc-to-hmi-demo"
-      HMC_SERVICE_BUS_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo"
+      HMC_SERVICE_BUS_OUTBOUND_QUEUE: "${HMC_SERVICE_BUS_OUTBOUND_QUEUE}"
+      HMC_SERVICE_BUS_INBOUND_QUEUE: "${HMC_SERVICE_BUS_INBOUND_QUEUE}"
+      HMC_SERVICE_BUS_INBOUND_CONNECTION_STRING: "${HMC_SERVICE_BUS_INBOUND_CONNECTION_STRING}"
+      HMC_SERVICE_BUS_OUTBOUND_CONNECTION_STRING: "${HMC_SERVICE_BUS_OUTBOUND_CONNECTION_STRING}"
     ports:
       - 4558:4558
     depends_on:
@@ -26,9 +28,11 @@ services:
       REFORM_SERVICE_NAME: hmc-hmi-inbound-adapter
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
-      CFT_HEARING_SERVICE_URL: "${CFT_HEARING_SERVICE_URL:-http://hmc-wiremock:4459}"
-      HMC_SERVICE_BUS_QUEUE: "hmc-from-hmi-demo"
-      HMC_SERVICE_BUS_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo"
+      CFT_HEARING_SERVICE_URL: "${CFT_HEARING_SERVICE_URL:-http://hmc-cft-hearing-service:4561}"
+      HMC_SERVICE_BUS_QUEUE: "${HMC_SERVICE_BUS_INBOUND_QUEUE}"
+      HMC_SERVICE_BUS_CONNECTION_STRING: "${HMC_SERVICE_BUS_INBOUND_CONNECTION_STRING}"
+      IDAM_API_URL: "${IDAM_STUB_SERVICE_NAME:-http://docker.for.mac.localhost:5000}"
+      S2S_URL: http://docker.for.mac.localhost:4502
     ports:
       - 4559:4559
     depends_on:
@@ -60,16 +64,18 @@ services:
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
       IDAM_OIDC_URL: "${IDAM_STUB_SERVICE_NAME:-http://docker.for.mac.localhost:5000}"
+      IDAM_API_URL: "${IDAM_STUB_SERVICE_NAME:-http://docker.for.mac.localhost:5000}"
       #inbound queue
-      HMC_QUEUE_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo"
-      HMC_SERVICE_BUS_QUEUE: "hmc-from-hmi-demo"
+      HMC_QUEUE_CONNECTION_STRING: "${HMC_SERVICE_BUS_INBOUND_CONNECTION_STRING}"
+      HMC_SERVICE_BUS_QUEUE: "${HMC_SERVICE_BUS_INBOUND_QUEUE}"
       #outbound queue
-      HMC_OUTBOUND_QUEUE_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=ListenSharedAccessKey;SharedAccessKey=OOdA/C2XcjeEFRjjiUVh4U8qKVDKLflbahqboHI/zoo=;EntityPath=hmc-from-hmi-demo"
-      HMC_OUTBOUND_SERVICE_BUS_QUEUE: "hmc-to-hmi-demo"
+      HMC_OUTBOUND_QUEUE_CONNECTION_STRING: "${HMC_SERVICE_BUS_OUTBOUND_CONNECTION_STRING}"
+      HMC_OUTBOUND_SERVICE_BUS_QUEUE: "${HMC_SERVICE_BUS_OUTBOUND_QUEUE}"
       #topic connection
-      HMC_SERVICE_BUS_CONNECTION_STRING: "Endpoint=sb://hmc-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=uULWmHY4zg1Zhf9B7KChykZxv+4x80CE2HcW1LASBwE=;EntityPath=hmc-to-cft-demo"
-      HMC_SERVICE_BUS_TOPIC: "hmc-to-cft-demo"
-      HMC_SERVICE_BUS_SUBSCRIPTION: "hmc-subs-to-cft-demo"
+      HMC_SERVICE_BUS_CONNECTION_STRING: "${HMC_SERVICE_BUS_TOPIC_CONNECTION_STRING}"
+      HMC_SERVICE_BUS_TOPIC: "${HMC_SERVICE_BUS_TOPIC}"
+      HMC_SERVICE_BUS_SUBSCRIPTION: "${HMC_SERVICE_BUS_SUBSCRIPTION}"
+      S2S_URL: http://docker.for.mac.localhost:4502
     ports:
       - 4561:4561
     depends_on:
@@ -85,8 +91,8 @@ services:
       timeout: 10s
       retries: 10
     environment:
-      HMC_DB_USERNAME:
-      HMC_DB_PASSWORD:
+      HMC_DB_USERNAME: "${HMC_DB_USERNAME}"
+      HMC_DB_PASSWORD: "${HMC_DB_PASSWORD}"
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - 5060:5432

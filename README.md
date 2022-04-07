@@ -14,12 +14,15 @@
 
 - [Docker](https://www.docker.com)
 
-*Memory and CPU allocations may need to be increased for successful execution of hmi applications altogether. (On Preferences / Advanced)*
+- *Memory and CPU allocations may need to be increased for successful execution of hmi applications altogether. (On Preferences / Advanced)*
 
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) - minimum version 2.0.57
 - [jq Json Processor](https://stedolan.github.io/jq)
 
-*The following documentation assumes that the current directory is `hmc-docker`.*
+- *The following documentation assumes that the current directory is `hmc-docker`.*
+
+- All Azure resources (topics, subscriptions, inbound and outbound queues, and their corresponding connection strings) 
+have been created and configured
 
 ## Quick start
 
@@ -27,63 +30,44 @@ Checkout `hmc-docker` project:
 
 ```bash
 git clone git@github.com:hmcts/hmc-docker.git
+cd hmc-docker
 ```
 
-### Update environment variables
+### Set environment variables
 
-
-Add these to the env_variables_all.txt
-````
-export HMC_QUEUE_CONNECTION_STRING=x
-export HMC_QUEUE_NAME=hmc-from-hmi-demo
-export HMC_SERVICE_BUS_CONNECTION_STRING=x
-export HMC_SERVICE_BUS_TOPIC=hmc-to-cft
-export HMC_OUTBOUND_QUEUE_CONNECTION_STRING=x
-export HMC_OUTBOUND_SERVICE_BUS_QUEUE=hmc-to-hmi-demo
-````
-
-The following variables need to be populated in the hmi.yml:
-
-For hmc-hmi-outbound-adapter
-````
-HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=x
-````
-
-For hmc-hmi-inbound-adapter
-````
-HMC_SERVICE_BUS_CONNECTION_STRING=Endpoint=x
-````
-
-For  hmc-cft-hearing-service
-````
-HMC_QUEUE_CONNECTION_STRING=Endpoint=x
-HMC_OUTBOUND_QUEUE_CONNECTION_STRING=x
-HMC_OUTBOUND_SERVICE_BUS_QUEUE=hmc-to-hmi-demo
-````
-
-
-Go to the hmc bash terminal and edit bash profile
-
-First by entering this
+Apply all of the environment variables set in `bin/env_variables_all.txt`, by running command
 
 ````
-vi .bash_profile
+source bin/env_variables_all.txt
 ````
 
-Then adding these two exports
+#### Azure specific environment variables
+
+The following Azure environment variables need to be exported with the relevant values -  Azure Service Bus connection 
+strings for queues and topics, and queue and topic names. 
+ 
+These values should **not** be stored in any files under version control as they will store user specific values.
+
+Once set these environment variables are used in the `hmi.yml` to configure the following docker containers
+
+ - hmc-hmi-outbound-adapter
+ - hmc-hmi-inbound-adapter
+ - hmc-cft-hearing-service
+ 
+````
+export HMC_SERVICE_BUS_OUTBOUND_QUEUE='xxx'
+export HMC_SERVICE_BUS_OUTBOUND_CONNECTION_STRING='xxx'
+
+export HMC_SERVICE_BUS_INBOUND_QUEUE='xxx'
+export HMC_SERVICE_BUS_INBOUND_CONNECTION_STRING='xxx'
+
+export HMC_SERVICE_BUS_TOPIC_CONNECTION_STRING='xxx'
+export HMC_SERVICE_BUS_TOPIC='xxx'
+export HMC_SERVICE_BUS_SUBSCRIPTION='xxx'
 
 ````
-export HMC_DB_USERNAME=hmc
-export HMC_DB_PASSWORD=hmc
-````
 
-exit the bash profile editor and enter this command
-
-````
-source ~/.bash_profile
-````
-
-Open a new window in the hmc-docker terminal and restart intelliJ
+### Pull latest container images
 
 Login to the Azure Container registry:
 
@@ -95,18 +79,13 @@ if you experience any error with the above command, try `az login` first
 
 For [Azure Authentication for pulling latest docker images](#azure-authentication-for-pulling-latest-docker-images)
 
-Run the login subscription
-````
-az acr login --name hmctspublic --subscription DCD-CNP-Prod
-az acr login --name hmctsprivate --subscription DCD-CNP-Prod
-````
-
 Pulling latest Docker images:
 
 ```bash
 ./hmc compose pull
 ```
-Running initialisation steps:
+
+### Running initialisation steps
 
 Note:
 required only on the first run. Once executed, it doesn't need to be executed again
@@ -129,43 +108,29 @@ Usage and commands available:
 
 ## Using HMC
 
-Once the containers are running, HMC's
+Verify HMC containers are running by hitting the `/health` endpoints and ensuring the response is
 
-1. Outbound Adapter can be run using
+```bash
+{"status":"UP"}
+```
+
+1. Outbound Adapter health can be verified using
 
  ```bash
 curl http://localhost:4558/health
  ```
 
-ensuring the response is
-
-```bash
-{"status":"UP"}
-```
-
-2. Inbound Adapter can be run using
+2. Inbound Adapter health can be verified using
 
 ```bash
 curl http://localhost:4559/health
  ```
-
-ensuring the response is
-
-```bash
-{"status":"UP"}
-```
 
 3. CFT Hearing Service can be run using
 
 ```bash
 curl http://localhost:4561/health
  ```
-
-ensuring the response is
-
-```bash
-{"status":"UP"}
-```
 
 ## Running branches
 
