@@ -22,7 +22,8 @@
 - *The following documentation assumes that the current directory is `hmc-docker`.*
 
 - All Azure resources (topics, subscriptions, inbound and outbound queues, and their corresponding connection strings) 
-have been created and configured
+have been created and configured, see [Creating Azure Service Bus Resources](https://tools.hmcts.net/confluence/display/HMAN/Creating+Azure+Service+Bus+Resources) 
+for details.
 
 ## Quick start
 
@@ -46,7 +47,13 @@ source bin/env_variables_all.txt
 The following Azure environment variables need to be exported with the relevant values -  Azure Service Bus connection 
 strings for queues and topics, and queue and topic names. 
  
-These values should **not** be stored in any files under version control as they will store user specific values.
+These values should **not** be stored in any files under version control as they will store user specific values - see 
+[Environment Variables](https://tools.hmcts.net/confluence/display/HMAN/Environment+Variables) for the recommended 
+approach to setting these.
+
+For details on getting the values for these environment variables, see [Creating Azure Service Bus Resources](https://tools.hmcts.net/confluence/display/HMAN/Creating+Azure+Service+Bus+Resources).
+
+
 
 Once set these environment variables are used in the `hmi.yml` to configure the following docker containers
 
