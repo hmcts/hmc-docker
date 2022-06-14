@@ -1,0 +1,5 @@
+[
+  { "role": "hearing-manager", "security_classification": "PUBLIC" },
+  { "role": "hearing-viewer", "security_classification": "PUBLIC" },
+  { "role": "listed-hearing-viewer", "security_classification": "PUBLIC" }
+]
