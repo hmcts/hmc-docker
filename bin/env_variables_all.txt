@@ -18,4 +18,4 @@ export BEFTA_IDAM_CAA_PASSWORD=Pa55word11
 export HMC_DB_USERNAME=hmc
 export HMC_DB_PASSWORD=hmc
 
-WIREMOCK_STUB_SERVICE_NAME=http://localhost:4459
+export WIREMOCK_STUB_SERVICE_NAME=http://localhost:4459
