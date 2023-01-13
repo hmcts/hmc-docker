@@ -78,6 +78,28 @@ export HMC_SERVICE_BUS_SUBSCRIPTION=xxx
 
 ````
 
+#### HMI/LA Specific Environment Variables
+
+The following HMI environment variables need to be exported with the relevant values.
+
+These values should **not** be stored in any files under version control as they will store user specific values - see
+[Environment Variables](https://tools.hmcts.net/confluence/display/HMAN/Environment+Variables) for the recommended
+approach to setting these.
+
+Once set these environment variables are used in the `hmi.yml` to configure the following docker containers
+
+- hmc-hmi-outbound-adapter
+- hmc-cft-hearing-service
+
+```
+export FH_BASE_URL = ""
+export CLIENT_ID = ""
+export CLIENT_SECRET = ""
+export SCOPE = ""
+export HMI_BASE_URL = ""
+
+````
+
 ### Pull latest container images
 
 Login to the Azure Container registry:
