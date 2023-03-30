@@ -13,6 +13,16 @@ services:
       HMC_SERVICE_BUS_INBOUND_QUEUE: "${HMC_SERVICE_BUS_INBOUND_QUEUE}"
       HMC_SERVICE_BUS_INBOUND_CONNECTION_STRING: "${HMC_SERVICE_BUS_INBOUND_CONNECTION_STRING}"
       HMC_SERVICE_BUS_OUTBOUND_CONNECTION_STRING: "${HMC_SERVICE_BUS_OUTBOUND_CONNECTION_STRING}"
+      #HMI/LA connection details
+      FH_BASE_URL: "${FH_BASE_URL}"
+      FH_GET_TOKEN_URL: "oauth2/v2.0/token"
+      CLIENT_ID: "${CLIENT_ID}"
+      CLIENT_SECRET: "${CLIENT_SECRET}"
+      SCOPE: "${SCOPE}"
+      GRANT_TYPE: "client_credentials"
+      HMI_BASE_URL: "${HMI_BASE_URL}"
+      HMI_SOURCE_SYSTEM: "CFT"
+      HMI_DESTINATION_SYSTEM: "MOCK"
     ports:
       - 4558:4558
     depends_on:
@@ -76,6 +86,16 @@ services:
       HMC_SERVICE_BUS_TOPIC: "${HMC_SERVICE_BUS_TOPIC}"
       HMC_SERVICE_BUS_SUBSCRIPTION: "${HMC_SERVICE_BUS_SUBSCRIPTION}"
       S2S_URL: http://docker.for.mac.localhost:4502
+      #HMI/LA connection details
+      FH_BASE_URL: "${FH_BASE_URL}"
+      FH_GET_TOKEN_URL: "oauth2/v2.0/token"
+      CLIENT_ID: "${CLIENT_ID}"
+      CLIENT_SECRET: "${CLIENT_SECRET}"
+      SCOPE: "${SCOPE}"
+      GRANT_TYPE: "client_credentials"
+      HMI_BASE_URL: "${HMI_BASE_URL}"
+      HMI_SOURCE_SYSTEM: "CFT"
+      HMI_DESTINATION_SYSTEM: "MOCK"
     ports:
       - 4561:4561
     depends_on:
