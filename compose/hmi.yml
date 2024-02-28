@@ -4,6 +4,11 @@ services:
     image: "${HMC_HMI_OUTBOUND_ADAPTER_USE_LOCAL-hmctspublic.azurecr.io/}hmc/hmi-outbound-adapter:${HMC_HMI_OUTBOUND_ADAPTER_TAG:-latest}"
     container_name: hmi-outbound-adapter
     environment:
+      CFT_HEARING_SERVICE_DB_USERNAME: hmc
+      CFT_HEARING_SERVICE_DB_PASSWORD: hmc
+      CFT_HEARING_SERVICE_DB_HOST: "hmc-shared-database"
+      CFT_HEARING_SERVICE_DB_PORT: 5432
+      CFT_HEARING_SERVICE_DB_NAME: hmc_cft_hearing_service
       SERVER_PORT: 4558
       REFORM_SERVICE_NAME: hmc-hmi-outbound-adapter
       REFORM_ENVIRONMENT: local
